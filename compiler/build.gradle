@@ -8,6 +8,11 @@ dependencies {
     implementation rootProject.kotlin
     implementation rootProject.kotlinpoet
     implementation project(":annotations")
+
+    testImplementation rootProject.compileTesting
+    testImplementation files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
+    testImplementation files(getRuntimeJar())
+    testImplementation rootProject.autoservice
 }
 
 sourceCompatibility = "7"
@@ -21,6 +26,21 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
+def getRuntimeJar() {
+    try {
+        final File javaBase = new File(System.getProperty("java.home")).getCanonicalFile();
+        File runtimeJar = new File(javaBase, "lib/rt.jar");
+        if (runtimeJar.exists()) {
+            return runtimeJar;
+        }
+        runtimeJar = new File(javaBase, "jre/lib/rt.jar");
+        return runtimeJar.exists() ? runtimeJar : null;
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+}
+
 repositories {
     mavenCentral()
 }

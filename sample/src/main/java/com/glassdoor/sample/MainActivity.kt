@@ -9,10 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    @Preference(defaultString = "hello") val something: String? = null
-    @Preference val smallPoints: Int? = null
-    @Preference(defaultFloat = 1.0f) val floater: Float? = null
-    @Preference val userSignedIn: Boolean? = null
+
     lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {

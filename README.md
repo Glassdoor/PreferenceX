@@ -46,13 +46,13 @@ class MyPreferences {
 ```kotlin
 // Or get from your favorite DI
 val sharedPreferences = context.getSharedPreferences("file_name", Context.MODE_PRIVATE) 
-val appStartCount = sharedPreferences.getAppStartCount() // Generated getter
+val appStartCount = sharedPreferences.getAppStartCount() // Generated extension
 ```
 
 #### Set the value
 ```kotlin
 val editor = sharedPreferences.edit() // Or get from your favorite DI
-editor.putAppStartCount(2) // Generated setter
+editor.putAppStartCount(2) // Generated extension
 ```
 
 ## Default Values

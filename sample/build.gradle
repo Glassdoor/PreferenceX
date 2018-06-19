@@ -31,4 +31,7 @@ dependencies {
     testImplementation rootProject.junit
     compileOnly project(":annotations")
     kapt project(":compiler")
+
+//    compileOnly "com.shaishavgandhi:prefextensions-annotations:0.1.0-SNAPSHOT"
+//    kapt "com.shaishavgandhi:prefextensions-compiler:0.1.0-SNAPSHOT"
 }

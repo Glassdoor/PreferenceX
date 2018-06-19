@@ -43,9 +43,21 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+subprojects { project ->
+    group = GROUP
+    version = VERSION_NAME
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+    }
 }

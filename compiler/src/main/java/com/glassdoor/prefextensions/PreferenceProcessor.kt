@@ -73,7 +73,8 @@ class PreferenceProcessor: AbstractProcessor() {
         val packageName = MoreElements.getPackage(elements.first()).toString()
         val fileBuilder = FileSpec.builder(packageName, "PreferenceExtensions")
         for (element in elements) {
-            val key = element.simpleName.toString()
+            val key = getElementKey(element)
+            val elementName = element.simpleName.toString()
             val returnType: ClassName? = kotlinMapper[element.asType().toString()]
             val preferenceType = preferenceMapper[element.asType().toString()]
 
@@ -81,18 +82,18 @@ class PreferenceProcessor: AbstractProcessor() {
                 val defaultValue = getDefaultValue(element, preferenceType)
 
                 // Getter
-                fileBuilder.addFunction(FunSpec.builder("get${key.capitalize()}")
+                fileBuilder.addFunction(FunSpec.builder("get${elementName.capitalize()}")
                     .receiver(sharedPreferenceClass)
                     .returns(returnType)
                     .addStatement("return get%L(\"%L\", %L)", preferenceType, key, defaultValue)
                     .build())
 
                 // Setter
-                fileBuilder.addFunction(FunSpec.builder("put${key.capitalize()}")
+                fileBuilder.addFunction(FunSpec.builder("put${elementName.capitalize()}")
                     .receiver(editorClass)
-                    .addParameter(ParameterSpec.builder(key, returnType)
+                    .addParameter(ParameterSpec.builder(elementName, returnType)
                         .build())
-                    .addStatement("put%L(\"%L\", %L).apply()", preferenceType, key, key)
+                    .addStatement("put%L(\"%L\", %L).apply()", preferenceType, key, elementName)
                     .build())
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR, "Couldn't recognize for type ${element.asType()}")
@@ -114,6 +115,13 @@ class PreferenceProcessor: AbstractProcessor() {
             "Boolean" -> prefAnnotation.defaultBoolean
             else ->  Any()
         }
+    }
+
+    private fun getElementKey(element: Element): String {
+        if (element.getAnnotation(Preference::class.java).key.isNotEmpty()) {
+            return element.getAnnotation(Preference::class.java).key
+        }
+        return element.simpleName.toString()
     }
 
     override fun getSupportedAnnotationTypes(): Set<String> {

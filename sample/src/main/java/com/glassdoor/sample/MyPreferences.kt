@@ -7,7 +7,8 @@ class MyPreferences {
     @Preference(defaultString = "hello")
     val something: String? = null
 
-    @Preference val smallPoints: Int? = null
+    @Preference(key = "customSmallPoints", defaultInt = 2)
+    val smallPoints: Int? = null
 
     @Preference(defaultFloat = 1.0f)
     val floater: Float? = null

@@ -6,13 +6,18 @@ Declarative extensions on SharedPreferences and Editor with the help of annotati
 
 ## Download
 
-PrefExtensions is still in early development. You can however get the latest SNAPSHOT version if you're interested in trying it out. 
+
+![Maven Central](https://img.shields.io/maven-central/v/com.shaishavgandhi/prefextensions-compiler.svg)
+
+
 ```groovy
 dependencies {
-  compileOnly 'com.shaishavgandhi:prefextensions-annotations:0.1.0-SNAPSHOT'
-  kapt 'com.shaishavgandhi:prefextensions-compiler:0.1.0-SNAPSHOT'
+  compileOnly 'com.shaishavgandhi:prefextensions-annotations:x.y.z'
+  kapt 'com.shaishavgandhi:prefextensions-compiler:x.y.z'
 }
 ```
+
+Snapshots of the development version are available in [Sonatype's snapshots repository.](https://oss.sonatype.org/content/repositories/snapshots/)
 
 
 ## Use Case
@@ -57,7 +62,7 @@ editor.putAppStartCount(2) // Generated extension
 
 ## Default Values
 
-SharedPreference reads require a default value to be given. You can easily define the default value for your given preference:
+SharedPreference reads require a default value to be given. You can easily define the default value for your given preference with an optional parameter:
 
 ```kotlin
 @Preference(defaultLong = 1L) 
@@ -66,6 +71,19 @@ private val appStartCount: Long? = null
 @Preference(defaultString = "hello world")
 private val greetingText: String? = null
 ```
+
+PrefExtensions also takes advantage of Kotlin's default values in parameters and the generated code creates an optional parameter in the getter. This is useful for one off-ing a different defaultValue than the one you provided in the annotation.
+
+**Generated Code**
+```kotlin
+fun SharedPreferences.getAppStartCount(defaultValue: Long = 1): Long = getLong("appStartCount", defaultValue)
+```
+
+**Usage**
+```kotlin
+preferences.getAppStartCount(defaultValue = 20) 
+```
+
 
 ## Custom Keys
 

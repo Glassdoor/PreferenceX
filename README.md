@@ -4,6 +4,16 @@
 
 Declarative extensions on SharedPreferences and Editor with the help of annotation processing.
 
+## Download
+
+PrefExtensions is still in early development. You can however get the latest SNAPSHOT version if you're interested in trying it out. 
+```groovy
+dependencies {
+  compileOnly 'com.shaishavgandhi:prefextensions-annotations:0.1.0-SNAPSHOT'
+  kapt 'com.shaishavgandhi:prefextensions-compiler:0.1.0-SNAPSHOT'
+}
+```
+
 
 ## Use Case
 
@@ -36,13 +46,13 @@ class MyPreferences {
 ```kotlin
 // Or get from your favorite DI
 val sharedPreferences = context.getSharedPreferences("file_name", Context.MODE_PRIVATE) 
-val appStartCount = sharedPreferences.getAppStartCount()
+val appStartCount = sharedPreferences.getAppStartCount() // Generated extension
 ```
 
 #### Set the value
 ```kotlin
 val editor = sharedPreferences.edit() // Or get from your favorite DI
-editor.putAppStartCount(2)
+editor.putAppStartCount(2) // Generated extension
 ```
 
 ## Default Values
@@ -56,6 +66,18 @@ private val appStartCount: Long? = null
 @Preference(defaultString = "hello world")
 private val greetingText: String? = null
 ```
+
+## Custom Keys
+
+PrefExtensions can be added incrementally into your project. If you already have a SharedPreference entry defined with a particular key that is not very reader friendly (like "app_launch_count"), you can easily define a custom key to your Preference declaration. 
+
+Using this, you can continue to use the newer API in some cases, while still supporting access through the usual SharedPreference API.
+
+```kotlin
+@Preference(key = "app_launch_count") 
+private val appStartCount: Long? = null
+```
+
 
 ## License
     

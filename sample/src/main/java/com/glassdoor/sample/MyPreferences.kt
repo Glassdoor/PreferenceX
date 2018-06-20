@@ -14,4 +14,6 @@ class MyPreferences {
     val floater: Float? = null
 
     @Preference val userSignedIn: Boolean? = null
+
+    @Preference val peopleList: Set<String>? = null
 }

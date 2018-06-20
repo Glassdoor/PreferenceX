@@ -4,6 +4,7 @@ import com.glassdoor.prefextensions.annotations.Preference
 import com.google.auto.common.MoreElements
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type
 import java.io.File
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
@@ -31,7 +32,8 @@ class PreferenceProcessor: AbstractProcessor() {
         "boolean" to ClassName.bestGuess("kotlin.Boolean"),
         "java.lang.Boolean" to ClassName.bestGuess("kotlin.Boolean"),
         "float" to ClassName.bestGuess("kotlin.Float"),
-        "java.lang.Float" to ClassName.bestGuess("kotlin.Float")
+        "java.lang.Float" to ClassName.bestGuess("kotlin.Float"),
+        "java.util.Set<java.lang.String>" to ParameterizedTypeName.get(ClassName.bestGuess("kotlin.collections.Set"), ClassName.bestGuess("kotlin.String"))
     )
 
     private val preferenceMapper = hashMapOf(
@@ -43,7 +45,8 @@ class PreferenceProcessor: AbstractProcessor() {
         "boolean" to "Boolean",
         "java.lang.Boolean" to "Boolean",
         "float" to "Float",
-        "java.lang.Float" to "Float"
+        "java.lang.Float" to "Float",
+        "java.util.Set<java.lang.String>" to "StringSet"
     )
 
     private val sharedPreferenceClass = ClassName.bestGuess("android.content.SharedPreferences")
@@ -75,7 +78,7 @@ class PreferenceProcessor: AbstractProcessor() {
         for (element in elements) {
             val key = getElementKey(element)
             val elementName = element.simpleName.toString()
-            val returnType: ClassName? = kotlinMapper[element.asType().toString()]
+            val returnType: TypeName? = kotlinMapper[element.asType().toString()]
             val preferenceType = preferenceMapper[element.asType().toString()]
 
             if (returnType != null && preferenceType != null) {
@@ -85,7 +88,10 @@ class PreferenceProcessor: AbstractProcessor() {
                 fileBuilder.addFunction(FunSpec.builder("get${elementName.capitalize()}")
                     .receiver(sharedPreferenceClass)
                     .returns(returnType)
-                    .addStatement("return get%L(\"%L\", %L)", preferenceType, key, defaultValue)
+                    .addParameter(ParameterSpec.builder("defaultValue", returnType)
+                        .defaultValue("%L", defaultValue)
+                        .build())
+                    .addStatement("return get%L(\"%L\", %L)", preferenceType, key, "defaultValue")
                     .build())
 
                 // Setter
@@ -113,6 +119,7 @@ class PreferenceProcessor: AbstractProcessor() {
             "Int" -> prefAnnotation.defaultInt
             "Float" -> "${prefAnnotation.defaultFloat}f"
             "Boolean" -> prefAnnotation.defaultBoolean
+            "StringSet" -> "emptySet<String>()"
             else ->  Any()
         }
     }

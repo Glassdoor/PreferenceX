@@ -33,6 +33,7 @@ ext {
     kotlinpoet = "com.squareup:kotlinpoet:0.7.0"
 
     compileTesting = "com.google.testing.compile:compile-testing:0.15"
+    robolectric = "org.robolectric:robolectric:3.8"
 
     junit = "junit:junit:4.12"
 

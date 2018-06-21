@@ -21,13 +21,13 @@ class MainActivity : AppCompatActivity() {
 
         save.setOnClickListener {
             val value = editor.text.toString()
-            preferences.edit().putSomething(value).run {
+            preferences.edit().putMessage(value).run {
                 bindText()
             }
         }
     }
 
     fun bindText() {
-        text.text = preferences.getSomething()
+        text.text = preferences.getMessage()
     }
 }

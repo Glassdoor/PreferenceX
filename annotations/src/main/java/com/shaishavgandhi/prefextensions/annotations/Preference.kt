@@ -16,16 +16,55 @@
 package com.shaishavgandhi.prefextensions.annotations
 
 /**
+ * Use this annotation to indicate that extension functions
+ * on [android.content.SharedPreferences] and
+ * [android.content.SharedPreferences.Editor] should be generated.
+ *
+ * It can only be applied to the data types already supported by
+ * [android.content.SharedPreferences].
  *
  */
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.SOURCE)
-annotation class Preference(val defaultInt: Int = 0,
-                            val defaultString: String = "",
-                            val defaultLong: Long = 0,
-                            val defaultBoolean: Boolean = false,
-                            val defaultFloat: Float = 0.0F,
-                            val key: String = "")
+annotation class Preference(
+    /**
+     * The default integer value that will be used
+     * when getting the value from the SharedPReferences.
+     * If no value is specified, it will default to `0`
+     */
+    val defaultInt: Int = 0,
+    /**
+     * The default String value that will be used
+     * when getting the value from the SharedPreferences.
+     * If no value is specified, it will default to an empty
+     * string.
+     */
+    val defaultString: String = "",
+    /**
+     * The default Long value that will be used
+     * when getting the value from the SharedPreferences.
+     * If no value is specified, it will default to `0`.
+     */
+    val defaultLong: Long = 0,
+    /**
+     * The default boolean value that will be used
+     * when getting the value from the SharedPreferences.
+     * If no value is specified, it will default to `false`.
+     */
+    val defaultBoolean: Boolean = false,
+    /**
+     * The default Float value that will be used
+     * when getting the value from the SharedPreferences.
+     * If no value is specified, it will default to `0.0`.
+     */
+    val defaultFloat: Float = 0.0F,
+    /**
+     * Custom key that can be applied to the generated
+     * SharedPreference extension. This is useful while
+     * migrating to PrefExtensions and you already have
+     * an existing `key` already in use.
+     */
+    val key: String = "")
 
 
 

@@ -22,6 +22,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -31,6 +37,8 @@ dependencies {
     testImplementation rootProject.junit
     compileOnly project(":annotations")
     kapt project(":compiler")
+
+    testImplementation rootProject.robolectric
 
 //    compileOnly "com.shaishavgandhi:prefextensions-annotations:0.1.0-SNAPSHOT"
 //    kapt "com.shaishavgandhi:prefextensions-compiler:0.1.0-SNAPSHOT"

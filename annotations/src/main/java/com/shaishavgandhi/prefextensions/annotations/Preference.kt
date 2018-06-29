@@ -13,17 +13,19 @@
  *  and limitations under the License.
  */
 
-package com.glassdoor.compilertest
+package com.shaishavgandhi.prefextensions.annotations
 
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runners.MethodSorters
+/**
+ *
+ */
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.SOURCE)
+annotation class Preference(val defaultInt: Int = 0,
+                            val defaultString: String = "",
+                            val defaultLong: Long = 0,
+                            val defaultBoolean: Boolean = false,
+                            val defaultFloat: Float = 0.0F,
+                            val key: String = "")
 
-@FixMethodOrder(MethodSorters.JVM)
-class PreferenceProcessorTest {
 
-    @Test
-    fun testSimplePreferenceCompilation() {
 
-    }
-}

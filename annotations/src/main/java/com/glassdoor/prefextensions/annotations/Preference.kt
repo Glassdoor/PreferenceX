@@ -13,7 +13,7 @@
  *  and limitations under the License.
  */
 
-package com.shaishavgandhi.prefextensions.annotations
+package com.glassdoor.prefextensions.annotations
 
 /**
  * Use this annotation to indicate that extension functions

@@ -15,7 +15,7 @@
 
 package com.glassdoor.sample
 
-import com.shaishavgandhi.prefextensions.annotations.Preference
+import com.glassdoor.prefextensions.annotations.Preference
 
 class MyPreferences {
 

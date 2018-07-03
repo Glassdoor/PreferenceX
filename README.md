@@ -1,6 +1,6 @@
 # PrefExtensions
 
-![CircleCI branch](https://img.shields.io/circleci/project/github/shaishavgandhi05/PrefExtensions/master.svg)
+![CircleCI branch](https://img.shields.io/circleci/project/github/Glassdoor/PrefExtensions/master.svg)
 
 Declarative extensions on SharedPreferences and Editor with the help of annotation processing.
 

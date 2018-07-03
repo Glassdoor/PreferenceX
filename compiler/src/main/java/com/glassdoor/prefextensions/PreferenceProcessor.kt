@@ -13,13 +13,12 @@
  *  and limitations under the License.
  */
 
-package com.shaishavgandhi.prefextensions
+package com.glassdoor.prefextensions
 
-import com.shaishavgandhi.prefextensions.annotations.Preference
+import com.glassdoor.prefextensions.annotations.Preference
 import com.google.auto.common.MoreElements
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type
 import java.io.File
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion

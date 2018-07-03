@@ -17,7 +17,7 @@ package com.glassdoor.sample;
 
 import android.app.Activity;
 
-import com.shaishavgandhi.prefextensions.annotations.Preference;
+import com.glassdoor.prefextensions.annotations.Preference;
 
 public class SampleActivity extends Activity {
 

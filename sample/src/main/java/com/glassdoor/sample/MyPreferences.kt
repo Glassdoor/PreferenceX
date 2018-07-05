@@ -15,11 +15,17 @@
 
 package com.glassdoor.sample
 
+import android.app.Application
+import android.preference.PreferenceManager
 import com.glassdoor.prefextensions.annotations.Preference
+import com.glassdoor.prefextensions.annotations.PreferenceFile
 
-class MyPreferences {
+class MyPreferences(application: Application) {
 
-    @Preference(defaultString = "hello")
+    @PreferenceFile(fileName = "fileName")
+    val preferences = PreferenceManager.getDefaultSharedPreferences(application)
+
+    @Preference(defaultString = "hello", files = ["fileName"])
     val message: String? = null
 
     @Preference(key = "customAge", defaultInt = 2)

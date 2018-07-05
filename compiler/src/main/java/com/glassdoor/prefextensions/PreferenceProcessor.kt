@@ -16,6 +16,7 @@
 package com.glassdoor.prefextensions
 
 import com.glassdoor.prefextensions.annotations.Preference
+import com.glassdoor.prefextensions.annotations.PreferenceFile
 import com.google.auto.common.MoreElements
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
@@ -23,6 +24,8 @@ import java.io.File
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
+import javax.lang.model.element.PackageElement
 import javax.lang.model.element.TypeElement
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
@@ -86,9 +89,12 @@ class PreferenceProcessor: AbstractProcessor() {
         if (elements.isEmpty()) {
             return false
         }
+        val fileElements = roundedEnv.getElementsAnnotatedWith(PreferenceFile::class.java)
+        val wrapperElement = fileElements.first()
 
         val packageName = MoreElements.getPackage(elements.first()).toString()
         val fileBuilder = FileSpec.builder(packageName, "PreferenceExtensions")
+        val wrapperBuilder = FileSpec.builder(packageName, "PreferenceWrapperExtensions")
         for (element in elements) {
             val key = getElementKey(element)
             val elementName = element.simpleName.toString()
@@ -115,12 +121,35 @@ class PreferenceProcessor: AbstractProcessor() {
                         .build())
                     .addStatement("put%L(\"%L\", %L).apply()", preferenceType, key, elementName)
                     .build())
+
+                /**
+                val receiver = getClassName(wrapperElement)
+
+                // Getter
+                wrapperBuilder.addFunction(FunSpec.builder("get${elementName.capitalize()}")
+                    .receiver(receiver)
+                    .returns(returnType)
+                    .addParameter(ParameterSpec.builder("defaultValue", returnType)
+                        .defaultValue("%L", defaultValue)
+                        .build())
+                    .addStatement("return %L.get%L(\"%L\", %L)", wrapperElement.simpleName.toString(), preferenceType, key, "defaultValue")
+                    .build())
+
+                // Setter
+                wrapperBuilder.addFunction(FunSpec.builder("put${elementName.capitalize()}")
+                    .receiver(receiver)
+                    .addParameter(ParameterSpec.builder(elementName, returnType)
+                        .build())
+                    .addStatement("%L.edit().put%L(\"%L\", %L).apply()", wrapperElement.simpleName.toString(), preferenceType, key, elementName)
+                    .build())
+                **/
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR, "Couldn't recognize for type ${element.asType()}")
                 continue
             }
         }
 
+        wrapperBuilder.build().writeTo(outputDir)
         fileBuilder.build().writeTo(outputDir)
         return true
     }
@@ -145,8 +174,21 @@ class PreferenceProcessor: AbstractProcessor() {
         return element.simpleName.toString()
     }
 
+    private fun getClassName(element: Element): ClassName {
+        val classname = element.enclosingElement.simpleName.toString()
+        val packageName: String
+        var enclosing = element
+        while (enclosing.kind != ElementKind.PACKAGE) {
+            enclosing = enclosing.enclosingElement
+        }
+        val packageElement = enclosing as PackageElement
+        packageName = packageElement.toString()
+
+        return ClassName.bestGuess("$packageName.$classname")
+    }
+
     override fun getSupportedAnnotationTypes(): Set<String> {
-        return setOf(Preference::class.java.canonicalName)
+        return setOf(Preference::class.java.canonicalName, PreferenceFile::class.java.canonicalName)
     }
 
     override fun getSupportedSourceVersion(): SourceVersion {

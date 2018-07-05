@@ -64,7 +64,10 @@ annotation class Preference(
      * migrating to PrefExtensions and you already have
      * an existing `key` already in use.
      */
-    val key: String = "")
+    val key: String = "",
+
+    val files: Array<String> = []
+)
 
 
 

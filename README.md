@@ -99,7 +99,7 @@ private val appStartCount: Long? = null
 
 ## License
     
-    Copyright 2018 Shaishav Gandhi.
+    Copyright 2018 Glasdoor, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

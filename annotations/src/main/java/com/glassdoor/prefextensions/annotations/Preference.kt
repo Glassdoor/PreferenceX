@@ -66,7 +66,7 @@ annotation class Preference(
      */
     val key: String = "",
 
-    val files: Array<String> = []
+    val file: String = ""
 )
 
 

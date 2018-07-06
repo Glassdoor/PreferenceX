@@ -22,10 +22,10 @@ import com.glassdoor.prefextensions.annotations.PreferenceFile
 
 class MyPreferences(application: Application) {
 
-    @PreferenceFile(fileName = "fileName")
+    @PreferenceFile
     val preferences = PreferenceManager.getDefaultSharedPreferences(application)
 
-    @Preference(defaultString = "hello", files = ["fileName"])
+    @Preference(defaultString = "hello")
     val message: String? = null
 
     @Preference(key = "customAge", defaultInt = 2)

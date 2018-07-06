@@ -1,6 +1,6 @@
 # PrefExtensions
 
-![CircleCI branch](https://img.shields.io/circleci/project/github/shaishavgandhi05/PrefExtensions/master.svg)
+![CircleCI branch](https://img.shields.io/circleci/project/github/Glassdoor/PrefExtensions/master.svg)
 
 Declarative extensions on SharedPreferences and Editor with the help of annotation processing.
 
@@ -99,7 +99,7 @@ private val appStartCount: Long? = null
 
 ## License
     
-    Copyright 2018 Shaishav Gandhi.
+    Copyright 2018 Glasdoor, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

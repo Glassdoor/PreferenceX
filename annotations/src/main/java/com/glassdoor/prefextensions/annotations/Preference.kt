@@ -17,11 +17,11 @@ package com.glassdoor.prefextensions.annotations
 
 /**
  * Use this annotation to indicate that extension functions
- * on [android.content.SharedPreferences] and
- * [android.content.SharedPreferences.Editor] should be generated.
+ * on [SharedPreferences] and
+ * [SharedPreferences.Editor] should be generated.
  *
  * It can only be applied to the data types already supported by
- * [android.content.SharedPreferences].
+ * [SharedPreferences].
  *
  */
 @Target(AnnotationTarget.FIELD)
@@ -64,7 +64,19 @@ annotation class Preference(
      * migrating to PrefExtensions and you already have
      * an existing `key` already in use.
      */
-    val key: String = "")
+    val key: String = "",
+    /**
+     * Name of the file of your SharedPreference instance.
+     * In case you have more than one SharedPreference
+     * instance in your custom wrapper, you should
+     * annotate the instance with [PreferenceFile] and
+     * have that file name mentioned in your @Preference
+     * declaration
+     *
+     * @see [PreferenceFile]
+     */
+    val file: String = ""
+)
 
 
 

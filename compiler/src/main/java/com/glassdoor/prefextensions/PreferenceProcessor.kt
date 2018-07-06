@@ -15,7 +15,9 @@
 
 package com.glassdoor.prefextensions
 
+import com.glassdoor.prefextensions.PreferenceUtils.getClassName
 import com.glassdoor.prefextensions.annotations.Preference
+import com.glassdoor.prefextensions.annotations.PreferenceFile
 import com.google.auto.common.MoreElements
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
@@ -23,6 +25,8 @@ import java.io.File
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
+import javax.lang.model.element.PackageElement
 import javax.lang.model.element.TypeElement
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
@@ -31,40 +35,14 @@ import javax.tools.Diagnostic
 @AutoService(Processor::class)
 class PreferenceProcessor: AbstractProcessor() {
 
-    lateinit var elementUtils: Elements
-    lateinit var typeUtils: Types
+    private lateinit var elementUtils: Elements
+    private lateinit var typeUtils: Types
     private lateinit var messager: Messager
     private lateinit var options: Map<String, String>
     private lateinit var outputDir: File
 
-    private val kotlinMapper = hashMapOf(
-        "java.lang.String" to ClassName.bestGuess("kotlin.String"),
-        "java.lang.Long" to ClassName.bestGuess("kotlin.Long"),
-        "long" to ClassName.bestGuess("kotlin.Long"),
-        "int" to ClassName.bestGuess("kotlin.Int"),
-        "java.lang.Integer" to ClassName.bestGuess("kotlin.Int"),
-        "boolean" to ClassName.bestGuess("kotlin.Boolean"),
-        "java.lang.Boolean" to ClassName.bestGuess("kotlin.Boolean"),
-        "float" to ClassName.bestGuess("kotlin.Float"),
-        "java.lang.Float" to ClassName.bestGuess("kotlin.Float"),
-        "java.util.Set<java.lang.String>" to ParameterizedTypeName.get(ClassName.bestGuess("kotlin.collections.Set"), ClassName.bestGuess("kotlin.String"))
-    )
-
-    private val preferenceMapper = hashMapOf(
-        "java.lang.String" to "String",
-        "java.lang.Long" to "Long",
-        "long" to "Long",
-        "int" to "Int",
-        "java.lang.Integer" to "Int",
-        "boolean" to "Boolean",
-        "java.lang.Boolean" to "Boolean",
-        "float" to "Float",
-        "java.lang.Float" to "Float",
-        "java.util.Set<java.lang.String>" to "StringSet"
-    )
-
-    private val sharedPreferenceClass = ClassName.bestGuess("android.content.SharedPreferences")
-    private val editorClass = ClassName.bestGuess("android.content.SharedPreferences.Editor")
+    private val preferenceFileMap = mutableMapOf<String, Element>()
+    private val preferenceClassMap = mutableMapOf<ClassName, Element>()
 
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
@@ -86,67 +64,26 @@ class PreferenceProcessor: AbstractProcessor() {
         if (elements.isEmpty()) {
             return false
         }
+        val fileElements = roundedEnv.getElementsAnnotatedWith(PreferenceFile::class.java)
 
-        val packageName = MoreElements.getPackage(elements.first()).toString()
-        val fileBuilder = FileSpec.builder(packageName, "PreferenceExtensions")
-        for (element in elements) {
-            val key = getElementKey(element)
-            val elementName = element.simpleName.toString()
-            val returnType: TypeName? = kotlinMapper[element.asType().toString()]
-            val preferenceType = preferenceMapper[element.asType().toString()]
-
-            if (returnType != null && preferenceType != null) {
-                val defaultValue = getDefaultValue(element, preferenceType)
-
-                // Getter
-                fileBuilder.addFunction(FunSpec.builder("get${elementName.capitalize()}")
-                    .receiver(sharedPreferenceClass)
-                    .returns(returnType)
-                    .addParameter(ParameterSpec.builder("defaultValue", returnType)
-                        .defaultValue("%L", defaultValue)
-                        .build())
-                    .addStatement("return get%L(\"%L\", %L)", preferenceType, key, "defaultValue")
-                    .build())
-
-                // Setter
-                fileBuilder.addFunction(FunSpec.builder("put${elementName.capitalize()}")
-                    .receiver(editorClass)
-                    .addParameter(ParameterSpec.builder(elementName, returnType)
-                        .build())
-                    .addStatement("put%L(\"%L\", %L).apply()", preferenceType, key, elementName)
-                    .build())
+        for (file in fileElements) {
+            if (file.getAnnotation(PreferenceFile::class.java).fileName.isNotEmpty()) {
+                messager.printMessage(Diagnostic.Kind.WARNING, "Got in")
+                val fileName = file.getAnnotation(PreferenceFile::class.java).fileName
+                preferenceFileMap[fileName] = file
             } else {
-                messager.printMessage(Diagnostic.Kind.ERROR, "Couldn't recognize for type ${element.asType()}")
-                continue
+                val className = getClassName(file)
+                preferenceClassMap[className] = file
             }
         }
 
-        fileBuilder.build().writeTo(outputDir)
+        val writer = PreferencesExtensionWriter(preferenceFileMap, preferenceClassMap, messager)
+        writer.writeExtensions(elements, outputDir)
         return true
     }
 
-    private fun getDefaultValue(element: Element, preferenceType: String): Any {
-        val prefAnnotation = element.getAnnotation(Preference::class.java)
-        return when (preferenceType) {
-            "String" -> "\"${prefAnnotation.defaultString}\""
-            "Long" -> prefAnnotation.defaultLong
-            "Int" -> prefAnnotation.defaultInt
-            "Float" -> "${prefAnnotation.defaultFloat}f"
-            "Boolean" -> prefAnnotation.defaultBoolean
-            "StringSet" -> "emptySet<String>()"
-            else ->  Any()
-        }
-    }
-
-    private fun getElementKey(element: Element): String {
-        if (element.getAnnotation(Preference::class.java).key.isNotEmpty()) {
-            return element.getAnnotation(Preference::class.java).key
-        }
-        return element.simpleName.toString()
-    }
-
     override fun getSupportedAnnotationTypes(): Set<String> {
-        return setOf(Preference::class.java.canonicalName)
+        return setOf(Preference::class.java.canonicalName, PreferenceFile::class.java.canonicalName)
     }
 
     override fun getSupportedSourceVersion(): SourceVersion {

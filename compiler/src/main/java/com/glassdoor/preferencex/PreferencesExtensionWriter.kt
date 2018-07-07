@@ -13,10 +13,10 @@
  *  and limitations under the License.
  */
 
-package com.glassdoor.prefextensions
+package com.glassdoor.preferencex
 
-import com.glassdoor.prefextensions.PreferenceUtils.getClassName
-import com.glassdoor.prefextensions.annotations.Preference
+import com.glassdoor.preferencex.PreferenceUtils.getClassName
+import com.glassdoor.preferencex.annotations.Preference
 import com.google.auto.common.MoreElements
 import com.squareup.kotlinpoet.*
 import java.io.File

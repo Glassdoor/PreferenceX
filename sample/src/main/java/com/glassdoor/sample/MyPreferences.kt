@@ -17,8 +17,8 @@ package com.glassdoor.sample
 
 import android.app.Application
 import android.preference.PreferenceManager
-import com.glassdoor.prefextensions.annotations.Preference
-import com.glassdoor.prefextensions.annotations.PreferenceFile
+import com.glassdoor.preferencex.annotations.Preference
+import com.glassdoor.preferencex.annotations.PreferenceFile
 
 class MyPreferences(application: Application) {
 

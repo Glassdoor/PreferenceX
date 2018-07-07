@@ -1,6 +1,6 @@
-# PrefX
+# PreferenceX
 
-![CircleCI branch](https://img.shields.io/circleci/project/github/Glassdoor/PrefX/master.svg)
+![CircleCI branch](https://img.shields.io/circleci/project/github/Glassdoor/PreferenceX/master.svg)
 
 Declarative extensions on SharedPreferences and Editor with the help of annotation processing.
 
@@ -38,7 +38,7 @@ This isn't the most readable API. Without reading the key, it's hard to know wha
 
 ## Usage
 
-PrefX creates a readable API by generating extensions on `SharedPreferences` and `SharedPreferences.Editor`. The same example would be something like:
+PreferenceX creates a readable API by generating extensions on `SharedPreferences` and `SharedPreferences.Editor`. The same example would be something like:
 
 #### Declare your preference variable:
 ```kotlin
@@ -72,7 +72,7 @@ private val appStartCount: Long? = null
 private val greetingText: String? = null
 ```
 
-PrefX also takes advantage of Kotlin's default values in parameters and the generated code creates an optional parameter in the getter. This is useful for one off-ing a different defaultValue than the one you provided in the annotation.
+PreferenceX also takes advantage of Kotlin's default values in parameters and the generated code creates an optional parameter in the getter. This is useful for one off-ing a different defaultValue than the one you provided in the annotation.
 
 **Generated Code**
 ```kotlin
@@ -87,7 +87,7 @@ preferences.getAppStartCount(defaultValue = 20)
 
 ## Custom Keys
 
-PrefX can be added incrementally into your project. If you already have a SharedPreference entry defined with a particular key that is not very reader friendly (like "app_launch_count"), you can easily define a custom key to your Preference declaration. 
+PreferenceX can be added incrementally into your project. If you already have a SharedPreference entry defined with a particular key that is not very reader friendly (like "app_launch_count"), you can easily define a custom key to your Preference declaration. 
 
 Using this, you can continue to use the newer API in some cases, while still supporting access through the usual SharedPreference API.
 

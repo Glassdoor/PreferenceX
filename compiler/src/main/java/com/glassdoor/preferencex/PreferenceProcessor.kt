@@ -13,11 +13,11 @@
  *  and limitations under the License.
  */
 
-package com.glassdoor.prefextensions
+package com.glassdoor.preferencex
 
-import com.glassdoor.prefextensions.PreferenceUtils.getClassName
-import com.glassdoor.prefextensions.annotations.Preference
-import com.glassdoor.prefextensions.annotations.PreferenceFile
+import com.glassdoor.preferencex.PreferenceUtils.getClassName
+import com.glassdoor.preferencex.annotations.Preference
+import com.glassdoor.preferencex.annotations.PreferenceFile
 import com.google.auto.common.MoreElements
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
@@ -77,7 +77,11 @@ class PreferenceProcessor: AbstractProcessor() {
             }
         }
 
-        val writer = PreferencesExtensionWriter(preferenceFileMap, preferenceClassMap, messager)
+        val writer = PreferencesExtensionWriter(
+            preferenceFileMap,
+            preferenceClassMap,
+            messager
+        )
         writer.writeExtensions(elements, outputDir)
         return true
     }

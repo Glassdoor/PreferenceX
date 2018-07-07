@@ -13,7 +13,7 @@
  *  and limitations under the License.
  */
 
-package com.glassdoor.prefextensions
+package com.glassdoor.preferencex
 
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.Element

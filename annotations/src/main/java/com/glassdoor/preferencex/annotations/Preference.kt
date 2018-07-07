@@ -13,7 +13,7 @@
  *  and limitations under the License.
  */
 
-package com.glassdoor.prefextensions.annotations
+package com.glassdoor.preferencex.annotations
 
 /**
  * Use this annotation to indicate that extension functions
@@ -61,7 +61,7 @@ annotation class Preference(
     /**
      * Custom key that can be applied to the generated
      * SharedPreference extension. This is useful while
-     * migrating to PrefExtensions and you already have
+     * migrating to PreferenceX and you already have
      * an existing `key` already in use.
      */
     val key: String = "",

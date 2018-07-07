@@ -13,7 +13,7 @@
  *  and limitations under the License.
  */
 
-package com.glassdoor.prefextensions.annotations
+package com.glassdoor.preferencex.annotations
 
 /**
  * Use this annotation when you want to generate extensions
@@ -48,7 +48,7 @@ annotation class PreferenceFile(
      * you're annotating. If you have more than one instance
      * of SharedPreferences (presumably for multiple files of
      * SharedPreferences), you should specify the `fileName`
-     * so that PrefExtensions can generate the appropriate
+     * so that PreferenceX can generate the appropriate
      * extensions on the appropriate SharedPreference instance.
      * For example:
      * ```

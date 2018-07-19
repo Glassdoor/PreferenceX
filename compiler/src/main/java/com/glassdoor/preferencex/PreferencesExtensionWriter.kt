@@ -176,7 +176,17 @@ class PreferencesExtensionWriter(
             .addParameter(
                 ParameterSpec.builder("defaultValue", returnType)
                     .defaultValue("%L", defaultValue)
-                    .build())
+                    .build()
+            )
+            .addKdoc(CodeBlock.builder()
+                .addStatement("Extension to get value from [android.content.SharedPreferences].")
+                .addStatement("Returns the [$returnType] corresponding to the given key. If the value isn't found, ")
+                .addStatement("it returns the [defaultValue]")
+                .add("\n")
+                .addStatement("@param defaultValue value to return if SharedPreference doesn't contain any value for given key.")
+                .addStatement("@return value returned from the shared preference or default value")
+                .build()
+            )
         if (forWrapper) {
             builder.addStatement("return %L.get%L(\"%L\", %L)", wrapperName, preferenceType, key, "defaultValue")
         } else {
@@ -206,7 +216,15 @@ class PreferencesExtensionWriter(
             .receiver(receiver)
             .addParameter(
                 ParameterSpec.builder(elementName, returnType)
-                    .build())
+                    .build()
+            )
+            .addKdoc(CodeBlock.builder()
+                .addStatement("Extension to put value to [android.content.SharedPreferences.Editor].")
+                .addStatement("This will asynchronously set the value using [android.content.SharedPreferences.Editor.apply].")
+                .add("\n")
+                .addStatement("@param $elementName value to written to [SharedPreferences.Editor].")
+                .build()
+            )
         if (forWrapper) {
             builder.addStatement("%L.edit().put%L(\"%L\", %L).apply()", wrapperName, preferenceType, key, elementName)
         } else {

@@ -23,6 +23,7 @@ import java.io.File
 import javax.annotation.processing.Messager
 import javax.lang.model.element.Element
 import javax.tools.Diagnostic
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 class PreferencesExtensionWriter(
     private val preferenceFileMap: Map<String, Element>,
@@ -48,7 +49,7 @@ class PreferencesExtensionWriter(
         "java.lang.Boolean" to ClassName.bestGuess("kotlin.Boolean"),
         "float" to ClassName.bestGuess("kotlin.Float"),
         "java.lang.Float" to ClassName.bestGuess("kotlin.Float"),
-        "java.util.Set<java.lang.String>" to ParameterizedTypeName.get(ClassName.bestGuess("kotlin.collections.Set"), ClassName.bestGuess("kotlin.String"))
+        "java.util.Set<java.lang.String>" to ClassName.bestGuess("kotlin.collections.Set").parameterizedBy(ClassName.bestGuess("kotlin.String"))
     )
 
     /**

@@ -12,8 +12,8 @@ Declarative extensions on SharedPreferences and Editor with the help of annotati
 
 ```groovy
 dependencies {
-  compileOnly 'com.shaishavgandhi:prefextensions-annotations:x.y.z'
-  kapt 'com.shaishavgandhi:prefextensions-compiler:x.y.z'
+  compileOnly 'com.glassdoor:preferencex-annotations:x.y.z'
+  kapt 'com.glassdoor:preferencex-compiler:x.y.z'
 }
 ```
 

@@ -7,7 +7,7 @@ Declarative extensions on SharedPreferences and Editor with the help of annotati
 ## Download
 
 
-![Maven Central](https://img.shields.io/maven-central/v/com.shaishavgandhi/prefextensions-compiler.svg)
+![Maven Central](https://img.shields.io/maven-central/v/com.glassdoor/preferencex-compiler.svg)
 
 
 ```groovy
